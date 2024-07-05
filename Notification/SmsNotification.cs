@@ -3,29 +3,29 @@ using NotificationPlugin.Models;
 
 namespace NotificationPlugin
 {
-    public class SlackNotification : NotificationDecorator
+    public class SmsNotification : NotificationDecorator
     {
-        private readonly string _webhookUrl;
+        private readonly string _phoneNumber;
         NotificationModel _notificationModel = new();
         /// <summary>
-        /// This constructor should be called when there is a notification to wrap
+        /// This constructor should be called when a notification to wrap
         /// </summary>
-        public SlackNotification(INotification wrappedNotification, string webhookUrl) : base(wrappedNotification)
+        public SmsNotification(INotification wrappedNotification, string phoneNumber) : base(wrappedNotification)
         {
-            _webhookUrl = webhookUrl;
+            _phoneNumber = phoneNumber;
         }
-
         /// <summary>
         /// This constructor should be called when there is no notification to wrap
         /// </summary>
-        public SlackNotification(string webhookUrl)
+        public SmsNotification(string phoneNumber)
         {
-            _webhookUrl = webhookUrl;
+            _phoneNumber = phoneNumber;
         }
 
         public override void Send(string message)
         {
-            SendSlackNotification(message);
+            SendSms(message);
+
             //Checks whether there is a wrapped notification
             if (_wrappedNotification != null)
             {
@@ -34,11 +34,11 @@ namespace NotificationPlugin
             }
         }
 
-        private void SendSlackNotification(string message)
+        private void SendSms(string message)
         {
             // Logic to send SMS
             SetNotificationId(message);
-            Console.WriteLine($"Sending slack notification: {message}");
+            Console.WriteLine($"Sending SMS to {_phoneNumber}: {message}");
         }
 
         private void SetNotificationId(string message)
